@@ -37,4 +37,22 @@ router.get('/', function(req, res, next) {
   res.render('index', { title: 'Express' });
 });
 
+router.post('/carousel',function (req,res) {
+    let data=[{
+        banid:12,
+        pic:'/123'
+    }]
+    res.send(data)
+});
+router.post('/project',function (req,res) {
+    let data=[{
+        pic:'/123',
+        name:'sxd',
+        pos:'小弟弟',
+        focuson:34,
+        title:'懵懵懂懂',
+        exid:0
+    }]
+    res.send(data)
+})
 module.exports = router;
