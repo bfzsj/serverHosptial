@@ -3,6 +3,6 @@ let connection=mysql.createConnection({
     host:'localhost',
     user:'root',
     password:'5928647200',
-    database:'vuexms'
+    database:'appointment'
 })
 module.exports=connection;
