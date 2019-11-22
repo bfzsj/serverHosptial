@@ -10,9 +10,6 @@ var usersRouter = require('./routes/users');
 var app = express();
 
 app.all('*', function(req, res, next) {
-    console.log(req.connection.remoteAddress);
-    console.log(req.socket.remoteAddress);
-    console.log(req.connection.remoteAddress)
     res.header('Access-Control-Allow-Origin', '*');
     res.header('Access-Control-Allow-Headers', 'Content-Type, Content-Length, Authorization, Accept, X-Requested-With , yourHeaderFeild');
     res.header('Access-Control-Allow-Methods', 'PUT, POST, GET, DELETE, OPTIONS');

@@ -27,7 +27,6 @@ router.post('/carousel',function (req,res) {
     res.send(data)
 });
 router.post('/project',function (req,res) {
-    console.log(req)
     connection.query("select * from doctor",(err,data)=>{
         if(err){
             throw err;
