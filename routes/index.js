@@ -101,7 +101,11 @@ router.get("/getOpenId",function (req,res) {
 });
 router.post('/insertAppointment',(req,res)=>{
     let {doctorid,user_wx_id,year,month,day,time}=req.body;
-    connection.query("insert into appointment(doctorid,user_wx_id,year,month,day,time) values(?,?,?,?,?,?)" ,[doctorid,user_wx_id,year,month,day,time],(err,datas)=>{
+    let date=new Date();
+    date.setFullYear(year,(month-1),day)
+    let hour=time.split(":");
+    date.setHours(hour[0])
+    connection.query("insert into appointment(doctorid,user_wx_id,year,month,day,time,create_time) values(?,?,?,?,?,?,?)" ,[doctorid,user_wx_id,year,month,day,time,date],(err,datas)=>{
         if(err){
             throw err;
         }else {
@@ -111,13 +115,12 @@ router.post('/insertAppointment',(req,res)=>{
     })
 })
 router.post('/findOneAppointment',(req,res)=>{
-    let {user_wx_id}=req.body;
-    console.log(user_wx_id)
-    connection.query("select * from appointment where user_wx_id= ?" ,[user_wx_id],(err,datas)=>{
+    let {user_wx_id,doctorid}=req.body;
+    console.log(user_wx_id,doctorid)
+    connection.query("select * from appointment where user_wx_id= ? or doctorid= ?" ,[user_wx_id,doctorid],(err,datas)=>{
         if(err){
             throw err;
         }else {
-            console.log(datas)
             res.send(datas);
         }
     })
