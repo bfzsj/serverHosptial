@@ -109,7 +109,7 @@ router.post('/insertAppointment',(req,res)=>{
         if(err){
             throw err;
         }else {
-
+            connection.query("update doctor set reserve=reserve+1 where exid=?",doctorid,(err,data)=>{})
             res.send("成功");
         }
     })
@@ -118,6 +118,27 @@ router.post('/findOneAppointment',(req,res)=>{
     let {user_wx_id,doctorid}=req.body;
     console.log(user_wx_id,doctorid)
     connection.query("select * from appointment where user_wx_id= ? or doctorid= ?" ,[user_wx_id,doctorid],(err,datas)=>{
+        if(err){
+            throw err;
+        }else {
+            res.send(datas);
+        }
+    })
+})
+router.post('/findAppointment',(req,res)=>{
+    let {user_wx_id,doctorid}=req.body;
+    let par=user_wx_id
+    let sql="select * from appointment AS a,doctor AS b where a.doctorid=b.exid and a.user_wx_id=?"
+    if(user_wx_id!=undefined){
+        sql="select * from appointment AS a,doctor AS b where a.doctorid=b.exid and a.user_wx_id=?"
+        par=user_wx_id;
+    }
+    if(doctorid!=undefined){
+        sql="select * from appointment AS a,username AS b where a.user_wx_id=b.wx_open_id and a.doctorid=?"
+        par=doctorid
+    }
+    console.log(user_wx_id,doctorid)// a.id,a.user_wx_id,a.doctorid,a.year,a.month,a.day,a.time
+    connection.query(sql ,[par],(err,datas)=>{
         if(err){
             throw err;
         }else {
