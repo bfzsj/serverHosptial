@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50728
 File Encoding         : 65001
 
-Date: 2020-01-02 16:04:26
+Date: 2020-01-09 18:43:49
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -29,19 +29,14 @@ CREATE TABLE `appointment` (
   `time` varchar(32) DEFAULT NULL,
   `create_time` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of appointment
 -- ----------------------------
-INSERT INTO `appointment` VALUES ('2', 'okNWP1q33S4GMoDP1zfuvW5kEAWA', '1', '2020', '1', '6', '14:00', '2020-01-02 12:23:42');
-INSERT INTO `appointment` VALUES ('3', 'okNWP1q33S4GMoDP1zfuvW5kEAWA', '1', '2020', '1', '5', '14:00', '2020-01-02 13:23:55');
-INSERT INTO `appointment` VALUES ('4', 'okNWP1q33S4GMoDP1zfuvW5kEAWA', '1', '2020', '1', '4', '10:00', '2020-01-02 15:23:17');
-INSERT INTO `appointment` VALUES ('5', 'okNWP1q33S4GMoDP1zfuvW5kEAWA', '1', '2020', '1', '4', '15:00', '2020-01-02 15:31:59');
-INSERT INTO `appointment` VALUES ('6', 'okNWP1q33S4GMoDP1zfuvW5kEAWA', '1', '2020', '1', '3', '09:00', '2020-01-03 09:37:03');
-INSERT INTO `appointment` VALUES ('7', 'okNWP1q33S4GMoDP1zfuvW5kEAWA', '1', '2020', '1', '3', '10:00', '2020-01-03 10:38:40');
-INSERT INTO `appointment` VALUES ('8', 'okNWP1q33S4GMoDP1zfuvW5kEAWA', '1', '2020', '1', '3', '11:00', '2020-01-03 11:02:30');
-INSERT INTO `appointment` VALUES ('9', 'okNWP1q33S4GMoDP1zfuvW5kEAWA', '1', '2020', '1', '3', '12:00', '2020-01-03 12:03:32');
+INSERT INTO `appointment` VALUES ('11', 'okNWP1q33S4GMoDP1zfuvW5kEAWA', '1', '2020', '1', '10', '14:00', '2020-01-10 14:02:15');
+INSERT INTO `appointment` VALUES ('12', 'okNWP1q33S4GMoDP1zfuvW5kEAWA', '1', '2020', '1', '12', '10:00', '2020-01-12 10:28:58');
+INSERT INTO `appointment` VALUES ('13', 'okNWP1q33S4GMoDP1zfuvW5kEAWA', '1', '2020', '1', '9', '10:00', '2020-01-09 10:31:47');
 
 -- ----------------------------
 -- Table structure for doctor
@@ -54,13 +49,19 @@ CREATE TABLE `doctor` (
   `focuson` varchar(32) DEFAULT NULL COMMENT '关注人数',
   `pos` varchar(32) DEFAULT NULL COMMENT '职位',
   `goodat` varchar(32) DEFAULT NULL COMMENT '擅长',
+  `hospital` varchar(32) DEFAULT NULL,
+  `disc` varchar(32) DEFAULT NULL,
+  `reserve` int(6) DEFAULT NULL,
+  `intro` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`exid`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of doctor
 -- ----------------------------
-INSERT INTO `doctor` VALUES ('1', 'user1.jpg', '李医生', '34', '医生', '口腔治疗');
+INSERT INTO `doctor` VALUES ('1', 'user1.jpg', '李医生', '34', '医生', '口腔治疗', '北大附属医院', '302', '4', '李医生从事口腔正畸多年，有丰富的临床工作经验，对成人口腔正畸有很深的研究。擅长各种复杂类型成人正畸、儿童正畸等。累积正畸案例上万，有非常良好的患者口碑');
+INSERT INTO `doctor` VALUES ('4', '默认头像.jpg', '124', '0', '2', '2', '2', '2', '0', '2');
+INSERT INTO `doctor` VALUES ('6', '默认头像.jpg', '3', '0', '3', '3', '3', '3', '0', '3');
 
 -- ----------------------------
 -- Table structure for username
@@ -98,6 +99,6 @@ DELIMITER ;
 -- ----------------------------
 DROP EVENT IF EXISTS `event_auto_del_memorydata`;
 DELIMITER ;;
-CREATE DEFINER=`root`@`localhost` EVENT `event_auto_del_memorydata` ON SCHEDULE EVERY 1 DAY STARTS '2020-01-02 00:00:00' ON COMPLETION NOT PRESERVE ENABLE DO CALL autodel()
+CREATE DEFINER=`root`@`localhost` EVENT `event_auto_del_memorydata` ON SCHEDULE EVERY 1 DAY STARTS '2020-01-02 00:00:00' ON COMPLETION PRESERVE ENABLE DO CALL autodel()
 ;;
 DELIMITER ;

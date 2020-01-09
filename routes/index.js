@@ -10,7 +10,22 @@ connection.connect(()=>{
 });
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  res.render('index', { title: 'Express' });
+    let sql=["doctor","username","appointment"];
+    let request=[];
+    sql.forEach((item,index)=>{
+        request.push(new Promise((resolve,reject)=>{
+            connection.query("select * from "+item,(err,data)=>{
+                if(err){
+                    throw err;
+                }else {
+                    resolve(data)
+                }
+            })
+        }))
+    });
+    Promise.all(request).then((value)=>{
+        res.render('index', { title: '口腔诊所预约平台后台管理系统',doctor:value[0],username:value[1],appointment:value[2] });
+    })
 });
 
 router.post('/carousel',function (req,res) {
@@ -44,6 +59,60 @@ router.post('/findDoctor',function (req,res) {
         }
     })
 });
+router.post('/insertDoctor',function (req,res) {
+    let {disc,goodat,hospital,intro,name,pos}=req.body;
+    console.log(disc,goodat,hospital,intro,name,pos)
+    connection.query("insert into doctor(pic,name,focuson,pos,goodat,hospital,disc,reserve,intro) values('默认头像.jpg',?,'0',?,?,?,?,0,?)" ,[name,pos,goodat,hospital,disc,intro],(err,datas)=>{
+        if(err){
+            throw err;
+        }else {
+            console.log(datas)
+            res.send({
+                exid:datas.insertId,
+                pic:'默认头像.jpg',
+                name:name,
+                focuson:'0',
+                pos:pos,
+                goodat:goodat,
+                hospital:hospital,
+                disc:disc,
+                reserve:0,
+                intro:intro
+            });
+        }
+    })
+})
+router.post('/updateDoctor',function (req,res) {
+    let {exid,disc,goodat,hospital,intro,name,pos}=req.body;
+    connection.query("update doctor set disc=?,goodat=?,hospital=?,intro=?,name=?,pos=? where exid=?" ,[disc,goodat,hospital,intro,name,pos,exid],(err,datas)=>{
+        if(err){
+            throw err;
+        }else {
+            res.send({
+                exid:exid,
+                pic:'默认头像.jpg',
+                name:name,
+                focuson:'0',
+                pos:pos,
+                goodat:goodat,
+                hospital:hospital,
+                disc:disc,
+                reserve:0,
+                intro:intro
+            });
+        }
+    })
+})
+router.post('/deleteDoctor',function (req,res) {
+    let {exid}=req.body;
+    connection.query("delete from doctor where exid=?" ,[exid],(err,datas)=>{
+        if(err){
+            throw err;
+        }else {
+            res.send("成功");
+        }
+    })
+})
 router.get("/getOpenId",function (req,res) {
     let {code,appid,secret,userInfo}=req.query;
     userInfo=JSON.parse(userInfo)

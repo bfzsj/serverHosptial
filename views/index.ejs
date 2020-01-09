@@ -1,13 +1,236 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title><%= title %></title>
-    <link rel='stylesheet' href='/stylesheets/style.css' />
-    <script src="http://pv.sohu.com/cityjson?ie=utf-8"></script>
-  </head>
-  <body>
-    <h1><%= title %></h1>
-    <p>Welcome to <%= title %></p>
-  </body>
+    <head>
+        <title><%= title %></title>
+        <link rel='stylesheet' href='/stylesheets/style.css' />
+        <script src="http://pv.sohu.com/cityjson?ie=utf-8"></script>
+        <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+        <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+        <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    </head>
+    <body>
+        <div class="container">
+            <div class="row clearfix">
+                <div class="col-md-12 column" style="background-image: linear-gradient(to right, rgba(255,255,255,1), rgba(255,255,255,0.1)),url('/img/design/header.jpg');">
+                    <h1><%= title %></h1>
+                    <p>最新最全的口腔医疗管理</p>
+                </div>
+            </div>
+            <div class="row clearfix" style="margin-top: 30px">
+                <div class="col-md-12 column">
+                    <table class="table table-bordered">
+                        <caption>医生列表  <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#insertDoctor" onclick="document.querySelector('#doctorInsertBtn').style.display='inline-block';document.querySelector('#doctorUpdateBtn').style.display='none';">新增</button></caption>
+                        <thead>
+                            <tr>
+                                <th>序号</th>
+                                <th>头像</th>
+                                <th>姓名</th>
+                                <th>职位</th>
+                                <th>擅长</th>
+                                <th>关注量</th>
+                                <th>医院</th>
+                                <th>预约量</th>
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                        <tbody id="doctorBody">
+                        <% for(let i=0;i<doctor.length;i++){ var item=doctor[i]%>
+                            <tr>
+                                <td><%=(i+1)%></td>
+                                <td style="width: 100px">
+                                    <img src="/img/users/<%=item.pic%>" width="70" height="70" alt="">
+                                </td>
+                                <td>
+                                    <%=item.name%>
+                                </td>
+                                <td>
+                                    <%=item.pos%>
+                                </td>
+                                <td>
+                                    <%=item.goodat%>
+                                </td>
+                                <td>
+                                    <%=item.focuson%>
+                                </td>
+                                <td>
+                                    <%=item.hospital%>
+                                </td>
+                                <td>
+                                    <%=item.reserve%>
+                                </td>
+                                <td>
+                                    <button type="button" class="btn btn-warning" onclick="editModal(<%=i%>)" data-toggle="modal" data-target="#insertDoctor">修改</button>
+                                    <button type="button" class="btn btn-danger" onclick="deleteDoctor(<%=i%>,<%=item.exid%>)">删除</button>
+                                </td>
+                            </tr>
+                        <%}%>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="row clearfix">
+                <div class="col-md-12 column">
+
+                </div>
+            </div>
+            <div class="row clearfix">
+                <div class="col-md-12 column">
+                </div>
+            </div>
+        </div>
+        <div class="modal fade" id="insertDoctor" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal"
+                                aria-hidden="true">×
+                        </button>
+                        <h4 class="modal-title" id="myModalLabel">
+                            新增医生
+                        </h4>
+                    </div>
+                    <div class="modal-body">
+
+                        <form role="form" name="doctorForm">
+                            <div class="form-group">
+                                <label for="name">姓名</label>
+                                <input type="text" class="form-control" name="name" value="" placeholder="请输入医生姓名">
+                            </div>
+                            <div class="form-group">
+                                <label for="pos">职位</label>
+                                <input type="text" class="form-control" name="pos" value="" placeholder="请输入医生职位">
+                            </div>
+                            <div class="form-group">
+                                <label for="goodat">擅长</label>
+                                <input type="text" class="form-control" name="goodat" value="" placeholder="请输入医生擅长的技术">
+                            </div>
+                            <div class="form-group">
+                                <label for="hospital">医院</label>
+                                <input type="text" class="form-control" name="hospital" value="" placeholder="请输入医生坐诊医院">
+                            </div>
+                            <div class="form-group">
+                                <label for="disc">科室</label>
+                                <input type="text" class="form-control" name="disc" value="" placeholder="请输入医生的科室">
+                            </div>
+                            <div class="form-group">
+                                <label for="intro">介绍</label>
+                                <textarea type="text" class="form-control" name="intro" value="" placeholder="请输入医生的介绍"></textarea>
+                            </div>
+                        </form>
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" id="dismiss"
+                                data-dismiss="modal">关闭
+                        </button>
+                        <button type="button" id="doctorInsertBtn" style="display: none" class="btn btn-primary">
+                            新增
+                        </button>
+                        <button type="button" id="doctorUpdateBtn" style="display: none" class="btn btn-warning">
+                            修改
+                        </button>
+                    </div>
+                </div><!-- /.modal-content -->
+            </div><!-- /.modal-dialog -->
+        </div>
+    </body>
+    <script>
+        let doctors=JSON.parse('<%- JSON.stringify(doctor)%>');
+        let exid=null;
+        let doctorIndex=null
+        document.querySelector("#doctorInsertBtn").addEventListener("click",function () {
+            let inputs=Array.from(document.forms.doctorForm);
+            let data=new Object()
+            inputs.forEach((item,index)=>{
+                data[item.name]=item.value
+            })
+            console.log(data)
+            $.post("/insertDoctor",data,function (data,status) {
+                if(status=="success"){
+                    doctors.push(data)
+                    doctorsSearch();
+                    setTimeout(function () {
+                        document.querySelector("#dismiss").click()
+                    },500)
+                }
+            })
+        })
+        document.querySelector("#doctorUpdateBtn").addEventListener("click",function () {
+            let inputs=Array.from(document.forms.doctorForm);
+            let data=new Object()
+            inputs.forEach((item,index)=>{
+                data[item.name]=item.value
+            })
+            data["exid"]=exid;
+            $.post("/updateDoctor",data,function (data,status) {
+                if(status=="success"){
+                    doctors[doctorIndex]=data;
+                    doctorsSearch();
+                    setTimeout(function () {
+                        document.querySelector("#dismiss").click()
+                    },500)
+                }
+            })
+        })
+
+        function doctorsSearch(){
+            let trs=''
+            doctors.forEach((item,index)=>{
+                let str=`
+                <tr>
+                    <td>${index+1}</td>
+                    <td style="width: 100px">
+                        <img src="/img/users/${item.pic}" width="70" height="70" alt="">
+                    </td>
+                    <td>
+                        ${item.name}
+                    </td>
+                    <td>
+                        ${item.pos}
+                    </td>
+                    <td>
+                        ${item.goodat}
+                    </td>
+                    <td>
+                        ${item.focuson}
+                    </td>
+                    <td>
+                        ${item.hospital}
+                    </td>
+                    <td>
+                        ${item.reserve}
+                    </td>
+                    <td>
+                    <button type="button" class="btn btn-warning" onclick="editModal(${index})" data-toggle="modal" data-target="#insertDoctor">修改</button>
+                    <button type="button" class="btn btn-danger" onclick="deleteDoctor(${index},${item.exid})">删除</button>
+                    </td>
+                   </tr>`
+                trs+=str
+            })
+            document.querySelector("#doctorBody").innerHTML=trs
+        }
+
+        function editModal(index) {
+            document.querySelector('#doctorUpdateBtn').style.display='inline-block';
+            document.querySelector('#doctorInsertBtn').style.display='none';
+            let inputs=document.forms.doctorForm;
+            exid=doctors[index].exid
+            doctorIndex=index;
+            Object.keys(doctors[index]).forEach((item)=>{
+                if(inputs[item]!=undefined){
+                    inputs[item].value=doctors[index][item]
+                }
+            })
+        }
+        function deleteDoctor(index,exid){
+            console.log(index,exid)
+            $.post("/deleteDoctor",{exid:exid},function (data,status) {
+                if(status=="success"){
+                    doctors.splice(index,1)
+                    doctorsSearch();
+                }
+            })
+        }
+    </script>
 </html>
 
