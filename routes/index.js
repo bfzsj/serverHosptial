@@ -8,9 +8,9 @@ const request=require('request');
 connection.connect(()=>{
     console.log("数据库连接成功")
 });
-/* GET home page. */
+/* GET home page.  "select * from appointment AS a,doctor AS b where a.doctorid=b.exid and a.user_wx_id=?"*/
 router.get('/', function(req, res, next) {
-    let sql=["doctor","username","appointment"];
+    let sql=["doctor","username","appointment AS a,doctor AS b,username AS c where a.user_wx_id=c.wx_open_id and a.doctorid=b.exid"];
     let request=[];
     sql.forEach((item,index)=>{
         request.push(new Promise((resolve,reject)=>{
@@ -24,6 +24,7 @@ router.get('/', function(req, res, next) {
         }))
     });
     Promise.all(request).then((value)=>{
+        console.log(value[2])
         res.render('index', { title: '口腔诊所预约平台后台管理系统',doctor:value[0],username:value[1],appointment:value[2] });
     })
 });

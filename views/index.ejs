@@ -18,7 +18,7 @@
             </div>
             <div class="row clearfix" style="margin-top: 30px">
                 <div class="col-md-12 column">
-                    <table class="table table-bordered">
+                    <table class="table table-bordered table-striped">
                         <caption>医生列表  <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#insertDoctor" onclick="document.querySelector('#doctorInsertBtn').style.display='inline-block';document.querySelector('#doctorUpdateBtn').style.display='none';">新增</button></caption>
                         <thead>
                             <tr>
@@ -70,11 +70,68 @@
             </div>
             <div class="row clearfix">
                 <div class="col-md-12 column">
-
+                    <table class="table table-bordered table-striped">
+                        <caption>用户列表 </caption>
+                        <thead>
+                        <tr>
+                            <th>序号</th>
+                            <th>头像</th>
+                            <th>姓名</th>
+                            <th>手机号</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <% for(let i=0;i<username.length;i++){ var item=username[i]%>
+                        <tr>
+                            <td style="width:70px;"><%=(i+1)%></td>
+                            <td style="width: 100px">
+                                <img src="<%=item.imgUrl%>" width="70" height="70" alt="">
+                            </td>
+                            <td>
+                                <%=item.username%>
+                            </td>
+                            <td>
+                                <%=item.phone%>
+                            </td>
+                        </tr>
+                        <%}%>
+                        </tbody>
+                    </table>
                 </div>
             </div>
             <div class="row clearfix">
                 <div class="col-md-12 column">
+                    <table class="table table-bordered table-striped">
+                        <caption>预约列表 </caption>
+                        <thead>
+                        <tr>
+                            <th>序号</th>
+                            <th>预约人</th>
+                            <th>预约医生</th>
+                            <th>预约时间</th>
+                            <th>预约地址</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <% for(let i=0;i<appointment.length;i++){ var item=appointment[i]%>
+                        <tr>
+                            <td style="width:70px;"><%=(i+1)%></td>
+                            <td style="width: 100px">
+                                <%=item.username%>
+                            </td>
+                            <td>
+                                <%=item.name%>
+                            </td>
+                            <td>
+                                <%=item.year%>年<%=item.month%>月<%=item.day%>日
+                            </td>
+                            <td>
+                                <%=item.hospital%>-<%=item.disc%>科室
+                            </td>
+                        </tr>
+                        <%}%>
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
