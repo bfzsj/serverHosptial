@@ -38,7 +38,7 @@
                             <tr>
                                 <td><%=(i+1)%></td>
                                 <td style="width: 100px">
-                                    <img src="/img/users/<%=item.pic%>" width="70" height="70" alt="">
+                                    <img src="/img/users/<%=item.pic%>" width="70" height="70" alt="" data-toggle="modal" data-target="#addDoctorImg" onclick="updateImgModal(<%=i%>,<%=item.exid%>)">
                                 </td>
                                 <td>
                                     <%=item.name%>
@@ -132,6 +132,38 @@
                         <%}%>
                         </tbody>
                     </table>
+                </div>
+            </div>
+        </div>
+        <div class="modal fade" id="addDoctorImg" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal"
+                                aria-hidden="true">×
+                        </button>
+                        <h4 class="modal-title" id="myModalLabel">
+                            更改头像
+                        </h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="well">
+                            <form name="myDoctorImgForm" class="imgForm" >
+                                <div class="form-group">
+                                    <label>头像:</label>
+                                    <input type="file" name="myfile" style="" id="myfile">
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">关闭
+                        </button>
+                        <button type="button" class="btn btn-primary" data-dismiss="modal"
+                                onclick="updateImg()">
+                            提交更改
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -237,7 +269,7 @@
                 <tr>
                     <td>${index+1}</td>
                     <td style="width: 100px">
-                        <img src="/img/users/${item.pic}" width="70" height="70" alt="">
+                        <img src="/img/users/${item.pic}" width="70" height="70" alt="" data-toggle="modal" data-target="#addDoctorImg" onclick="updateImgModal(${index},${item.exid})">
                     </td>
                     <td>
                         ${item.name}
@@ -287,6 +319,32 @@
                     doctorsSearch();
                 }
             })
+        }
+        function updateImgModal(index,ex) {
+            exid=ex;
+            doctorIndex=index;
+        }
+        function updateImg() {
+            var formData=new FormData($(".imgForm")[0])
+            formData.append("exid",exid);
+            console.log(formData)
+            uploadFile("/uploadDoctorImg",formData,function (data) {
+                console.log(data)
+                doctors[doctorIndex].pic=data.pic;
+                doctorsSearch();
+            })
+        }
+        function uploadFile(url,formData,callback) {
+            $.ajax({
+                url:url,
+                type:'post',
+                data:formData,
+                contentType: false,// 当有文件要上传时，此项是必须的，否则后台无法识别文件流的起始位置(详见：#1)
+                processData: false,// 是否序列化data属性，默认true(注意：false时type必须是post，详见：#2)
+                success:function(data){
+                    callback(data);
+                },
+            });
         }
     </script>
 </html>

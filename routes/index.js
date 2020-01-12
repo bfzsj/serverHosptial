@@ -3,6 +3,10 @@ let router = express.Router();
 const rp = require('request-promise');
 const connection=require('./conn');
 const request=require('request');
+var xlsx = require('node-xlsx');
+var fs = require('fs');
+//上传文件
+var mutipart = require('multiparty');
 /* GET home page. */
 //接收请求
 connection.connect(()=>{
@@ -24,7 +28,6 @@ router.get('/', function(req, res, next) {
         }))
     });
     Promise.all(request).then((value)=>{
-        console.log(value[2])
         res.render('index', { title: '口腔诊所预约平台后台管理系统',doctor:value[0],username:value[1],appointment:value[2] });
     })
 });
@@ -216,6 +219,54 @@ router.post('/findAppointment',(req,res)=>{
         }
     })
 })
+router.post("/uploadDoctorImg", function (req, res) {
+    var form = new mutipart.Form({uploadDir: 'public/img/users/'});
+
+    formData(form, req, "public/img/users/", function (dstPath, fields) {
+
+        console.log(dstPath,fields.exid[0])
+        connection.query("update doctor set pic=? where exid=?", [dstPath,fields.exid[0]], function (err, data) {
+
+            if(err){
+                throw err;
+            }else{
+                res.send({
+                    pic:dstPath,
+                })
+            }
+
+
+        });
+
+    })
+
+})
+function formData(form, req, str, callback) {
+    form.parse(req, function (err, fields, files) {
+        var filesTmp = JSON.stringify(files, null, 2);
+        if (err) {
+            console.log('parse error: ' + err);
+        } else {
+            console.log('parse files: ' + filesTmp);
+            var inputFile = files.myfile[0];
+            var uploadedPath = inputFile.path;
+            var dstPath = str + inputFile.originalFilename;
+            //重命名为真实文件名
+            console.log(dstPath)
+            fs.rename(uploadedPath, dstPath, function (err) {
+                if (err) {
+                    console.log('rename error: ' + err);
+
+                } else {
+                    console.log('rename ok');
+                    callback(inputFile.originalFilename, fields);
+                }
+            });
+
+
+        }
+    });
+}
 module.exports = router;
 
   //  'https://api.weixin.qq.com/sns/jscode2session?grant_type=authorization_code&js_code=061h2AF70fIBpF1SBuH70JxEF70h2AFO&secret=0d8949e5dfb19aaefd8f568cdc5d4cdc&appid=wx7d118a6b1b628f42'
