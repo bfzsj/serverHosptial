@@ -19,6 +19,6 @@
     "request-promise": "^4.2.5",
     "multiparty": "^4.2.1",
     "node-xlsx": "^0.12.1",
-    "xlsx": "^0.14.1"
+    "xlsx": "^0.17.0"
   }
 }
